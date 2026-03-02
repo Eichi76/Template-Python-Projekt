@@ -42,7 +42,7 @@ dev = [
 ]
 
 [tool.isort]
-py_version = "py312"
+py_version = "312"
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 default_section = "THIRDPARTY"
 multi_line_output = 3
