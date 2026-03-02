@@ -1,0 +1,223 @@
+{
+    // =========================
+    // Editor-Grundeinstellungen
+    // =========================
+    "editor.tabSize": 4, // Anzahl der Spalten pro Tab
+    "editor.rulers": [100], // visuelle Lineale bei dieser Spaltenbreite
+    "editor.renderWhitespace": "trailing", // Anzeige von Whitespace (nur trailing)
+    "editor.fontSize": 16, // Schriftgröße im Editor
+    "editor.tokenColorCustomizations": { // Farbanpassungen für Editor-Syntax
+        "comments": "#f700ff", // Farbe für Kommentare in allen Dateitypen
+        "textMateRules": [
+            {
+                "scope": "string.quoted.docstring.multi.python", // Bereich für mehrzeilige Python-Docstrings
+                "settings": {
+                    "foreground": "#f700ff" // Farbe für Docstrings
+                }
+            }
+        ]
+    },
+
+    // =========================
+    // Editor - Format & Sprache spezifisch
+    // =========================
+    "[markdown]": { // Einstellungen speziell für Markdown-Dateien
+        "files.trimTrailingWhitespace": false, // kein Entfernen von trailing Whitespace in Markdown
+        "editor.wordWrapColumn": 100, // Zeilenumbruchspalte
+        "editor.wordWrap": "wordWrapColumn", // Umbruch anhand der Spalteneinstellung
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one", // Standard-Formatter für Markdown
+        "editor.formatOnSave": false, // kein Formatieren beim Speichern
+        "editor.useTabStops": false, // Tab-Stops deaktiviert
+        "editor.tabSize": 2 // Tab-Größe in Markdown
+    },
+    "[yaml]": { // Einstellungen speziell für YAML-Dateien
+        "editor.wordWrap": "wordWrapColumn", // Umbruch anhand der Spalteneinstellung
+        "editor.wordWrapColumn": 100, // Zeilenumbruchspalte
+        "editor.defaultFormatter": "redhat.vscode-yaml", // YAML-Formatter
+        "editor.formatOnSave": false // kein Formatieren beim Speichern
+    },
+    "[toml]": { // Einstellungen speziell für TOML-Dateien
+        "editor.wordWrap": "wordWrapColumn", // Umbruch anhand der Spalteneinstellung
+        "editor.wordWrapColumn": 100, // Zeilenumbruchspalte
+        "editor.defaultFormatter": "tamasfe.even-better-toml", // TOML-Formatter
+        "editor.formatOnSave": true // Formatieren beim Speichern aktiviert
+    },
+    "[json]": { // Einstellungen speziell für JSON-Dateien
+        "editor.defaultFormatter": "esbenp.prettier-vscode", // JSON-Formatter
+        "editor.formatOnSave": true, // Formatieren beim Speichern aktiviert
+        "editor.tabSize": 2 // ADD: Übereinstimmung mit .editorconfig (2 spaces)
+    },
+
+    // =========================
+    // Dateien/Workspace
+    // =========================
+    "files.autoSave": "onFocusChange", // automatische Speicherung beim Fokuswechsel
+    "files.associations": { // Dateizuschreibungen (z.B. für Syntax Highlighting)
+        "*.pyx": "cython" // .pyx Dateien als Cython behandeln
+    },
+    "files.insertFinalNewline": true, // am Dateiende eine neue Zeile einfügen
+    "files.trimFinalNewlines": true, // finale neue Zeilen entfernen falls mehrere vorhanden
+    "files.trimTrailingWhitespace": true, // trailing Whitespaces beim Speichern entfernen
+    "files.eol": "\n", // ADD: erzwungenes Zeilenende (LF) zur Übereinstimmung mit .editorconfig
+
+    // ADD: Ausgeblendete Ordner/Artefakte im Explorer und in der Suche
+    "files.exclude": {
+        "**/.ruff_cache": true,
+        "**/.venv": true,
+        "**/venv": true,
+        "**/env": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/*_rc.py": true,
+        "src/**/resources/*.py": true,
+        "**/build": true,
+        "**/dist": true
+    },
+    "search.exclude": {
+        "**/.venv": true,
+        "**/venv": true,
+        "**/env": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/*_rc.py": true,
+        "src/**/resources/*.py": true,
+        "**/build": true,
+        "**/dist": true
+    },
+
+    // =========================
+    // Explorer / UI
+    // =========================
+    "explorer.compactFolders": false, // Ordner nicht kompakt darstellen
+    "explorer.confirmDragAndDrop": false, // kein Bestätigen bei Drag & Drop im Explorer
+    "explorer.confirmDelete": false, // kein Bestätigen beim Löschen im Explorer
+    "explorer.copyRelativePathSeparator": "/", // Trenner für relative Pfade im Explorer
+    "workbench.editorAssociations": { // Dateiassoziation für Editor-Typen
+        "*.svg": "svgPreviewer.customEditor" // SVG mit benutzerdefiniertem Viewer öffnen
+    },
+
+    // =========================
+    // Terminal / Chat Tools
+    // =========================
+    "terminal.integrated.defaultProfile.windows": "Command Prompt", // Standard-Terminalprofil (Windows)
+    "python.terminal.activateEnvironment": true, // Python-Umgebung im Terminal automatisch aktivieren
+
+    // =========================
+    // Git / Versionskontrolle
+    // =========================
+    "git.enableSmartCommit": false, // Smart Commit Funktionalität aktivieren
+    "git.autofetch": true, // automatisch Repositories abrufen
+    "git.confirmSync": false, // kein Bestätigen beim Sync
+    "git.openRepositoryInParentFolders": "always", // Repo in Parent-Ordnern öffnen
+
+    // =========================
+    // Python / Linter / Formatter
+    // =========================
+    "python.languageServer": "Pylance", // Wählter Language Server für Python
+    "python.analysis.autoImportCompletions": false, // automatische Importvorschläge deaktiviert
+    "python.analysis.completeFunctionParens": false, // automatische Klammervervollständigung deaktiviert
+    "python.analysis.autoFormatStrings": true, // automatische Formatierung von f-Strings aktivieren
+    "python.analysis.logLevel": "Error", // Log-Level für Python-Analyse
+    "python.createEnvironment.contentButton": "show", // Button für Environment-Erstellung anzeigen
+    "python.missingPackage.severity": "Error", // Fehlende Pakete als Fehler markieren
+    "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe", // Standard-Interpreter-Pfad (Windows)
+    "[python]": {
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnType": false,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }, // Python-spezifische Editor-Einstellungen
+    }, // Python-spezifische Editor-Einstellungen
+
+    "mypy-type-checker.importStrategy": "fromEnvironment", // Importstrategie für mypy-Checker
+    "isort.check": true, // isort-Prüfung aktivieren
+    "isort.importStrategy": "fromEnvironment", // Importstrategie für isort
+    "ruff.organizeImports": false, // ruff: automatische Import-Organisierung deaktiviert
+    "ruff.fixAll": true, // ruff: alle Probleme automatisch beheben
+
+    // Also set modern mypy-type-checker extension settings and VS Code ignorePatterns
+    "mypy-type-checker.args": [
+        "--strict",
+    ],
+    "mypy-type-checker.ignorePatterns": [
+        "**/*_rc.py",
+        "docs/**",
+        "tests/**",
+        "src/**/resources/*.py"
+    ],
+
+    // =========================
+    // Markdown-Plugin-Einstellungen
+    // =========================
+    "markdown.validate.enabled": true, // Markdown-Validierung aktivieren
+    "markdown.extension.toc.levels": "2..6", // TOC-Ebenen von 2 bis 6
+    "markdown.extension.toc.updateOnSave": true, // TOC wird beim Speichern aktualisiert
+    "markdownlint.lintWorkspaceGlobs": [ // Dateien, die von markdownlint geprüft werden
+        "**/*.{md,mkd,mdwn,mdown,markdown,markdn,mdtxt,mdtext,workbook}",
+        "!**/*.code-search",
+        "!**/bower_components",
+        "!**/node_modules",
+        "!**/.git",
+        "!**/vendor",
+        "!**/.venv",
+        "!**/.github/ISSUE_TEMPLATE/**",
+        "!**/.github/PULL_REQUEST_TEMPLATE/**",
+        "!**/.github/**"
+    ],
+
+    // =========================
+    // CSV-Editor
+    // =========================
+    "csv-edit.readOption_delimitersToGuess": [ // Trennzeichen, die beim Einlesen erkannt werden sollen
+        "|",
+        "\t",
+        ",",
+        ";",
+        "\u001e",
+        "\u001f"
+    ],
+
+    // =========================
+    // Codesnap / UI-Tools
+    // =========================
+    "codesnap.showWindowControls": false, // Codesnap: Fenstersteuerung anzeigen/verbergen
+    "codesnap.shutterAction": "copy", // Codesnap: Aktion nach Aufnehmen (kopieren)
+
+    // =========================
+    // SVG / Preview / Extensions
+    // =========================
+    "svg.preview.autoOpen": true, // SVG-Vorschau automatisch öffnen
+
+    // =========================
+    // ErrorLens / Diagnostics
+    // =========================
+    "errorLens.delay": 1000, // Verzögerung in ms bevor ErrorLens angezeigt wird
+    "errorLens.enabledDiagnosticLevels": [ // Welche Level ErrorLens anzeigen soll
+        "error",
+        "warning"
+    ],
+    "errorLens.enabled": true, // ErrorLens aktivieren
+
+    // =========================
+    // GitHub Copilot / Chat Commit Instr.
+    // =========================
+    "github.copilot.chat.commitMessageGeneration.instructions": [ // Anweisungen für Commit-Generation durch Copilot
+        {
+            "file": ".github/.commit-instructions.md", // Pfad zur Instruktionsdatei
+            "type": "markdown" // Dateityp der Instruktionsdatei
+        }
+    ],
+
+    // =========================
+    // Sonstige Einstellungen / Workspace-Formatter
+    // =========================
+    "Workspace_Formatter.excludePattern": [ // Muster, die vom Workspace-Formatter ausgeschlossen sind
+        "**/build",
+        "**/.*",
+        "**/.vscode",
+        "**/html"
+    ],
+}
