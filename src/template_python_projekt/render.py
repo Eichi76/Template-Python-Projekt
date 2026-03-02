@@ -6,6 +6,7 @@ Versucht, `jinja2` zu importieren; falls nicht vorhanden, wird ein einfacher
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from string import Template
 from typing import Any
@@ -35,7 +36,7 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
             # fall back to the simple fallback below
             pass
 
-    # Fallback: replace {{ var }} with context[var]
-    # Very small and permissive fallback implementation
-    t = Template(text.replace("{{", "${").replace("}}", "}"))
+    # Fallback: convert Jinja-style `{{ var }}` to string.Template `${var}`
+    converted = re.sub(r"\{\{\s*([A-Za-z0-9_]+)\s*\}\}", r"${\1}", text)
+    t = Template(converted)
     return t.safe_substitute(**{k: str(v) for k, v in context.items()})
