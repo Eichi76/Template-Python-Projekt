@@ -1,0 +1,6 @@
+# Ignore Issue templates folder for markdownlint
+
+.github/ISSUE_TEMPLATE/
+.github/ISSUE_TEMPLATE/**
+.github/**
+**/.github/**

@@ -1,0 +1,23 @@
+{
+  "name": "template-python-projekt",
+  "version": "0.1.0",
+  "description": "Template Projekt für neue Python CLI / UI Projekte um den Start zuer erleichtern",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Eichi76 <eichi76@gmx.net>",
+  "licenses" : [
+    {
+      "type": "MIT",
+      "url": "https://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "devDependencies": {
+    "markdownlint-cli": "^0.47.0"
+  }
+}
