@@ -1,0 +1,33 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+root = true
+
+# Globale Standard-Einstellungen (entsprechen .vscode/settings.json)
+[*]
+indent_style = space
+indent_size = 4
+tab_width = 4
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown: Projektweit 2 Leerzeichen für Einrückungen/Listen, kein Trim für trailing spaces
+[*.md]
+indent_size = 2
+trim_trailing_whitespace = false
+
+# Python: explizit 4 Leerzeichen (PEP 8 / entspricht .vscode)
+[*.py]
+indent_size = 4
+tab_width = 4
+
+# Optional: JSON-Dateien häufig mit 2 Leerzeichen formatiert (nur wenn gewünscht)
+[*.json]
+indent_size = 2
+tab_width = 2
+
+# Makefiles: Tabs für Einrückungen, kein Trim für trailing spaces
+[Makefile]
+indent_style = tab
+trim_trailing_whitespace = false
