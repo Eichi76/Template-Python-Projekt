@@ -52,3 +52,27 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
     result = pattern.sub(_replace, text)
     # Any remaining simple {{ var }} without default will be replaced by empty string
     return re.sub(r"\{\{\s*[A-Za-z0-9_]+\s*\}\}", "", result)
+
+
+def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str]:
+    """Render all files in *path* and return a mapping of relative paths -> content.
+
+    The function walks *path* recursively, renders each file using
+    :func:`render_template_file` and returns a dictionary where keys are
+    POSIX-style relative paths (as strings) and values are the rendered file
+    contents.
+
+    This helper is useful for testing templates without writing output files.
+    """
+    root = Path(path)
+    if not root.exists():
+        msg = f"Path does not exist: {root}"
+        raise FileNotFoundError(msg)
+
+    rendered: dict[str, str] = {}
+    for p in sorted(root.rglob("*")):
+        if p.is_dir():
+            continue
+        rel = p.relative_to(root).as_posix()
+        rendered[rel] = render_template_file(p, context)
+    return rendered
