@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "{{ project_name }}"
+version = "0.1.0"
+description = "{{ description | default("Projektbeschreibung hier einfügen") }}"
+authors = ["{{ author }}"]
+license = "{{ license | default("MIT") }}"
+
+# Optional: Zusätzliche Felder können vom Generator ergänzt werden
+# Siehe PLACEHOLDER_SPEC.md für Regeln, wie Platzhalter funktionieren und
+# wie beim Erzeugen eines Projekts Werte bereitgestellt werden.
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+
+# Beispiel für optionale runtime-Abhängigkeiten
+# flask = "^2.0"
+
+[tool.poetry.dev-dependencies]
+# Platzhalter für dev-dependencies; generator kann hier Werte einfügen
+ruff = "{{ ruff_version | default('^0.31.0') }}"
+isort = "{{ isort_version | default('^5.12.0') }}"
+mypy = "{{ mypy_version | default('^1.0.0') }}"
+pre-commit = "{{ precommit_version | default('^3.4.0') }}"
+pytest = "{{ pytest_version | default('^7.0') }}"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# Hinweise zur Tool-Konfiguration — kopiere relevante Abschnitte in das Projekt
+[tool.ruff]
+# Beispieloptionen; der Generator kann diese aus der Vorlage übernehmen
+line-length = 100
+select = ["E", "F", "W", "I"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+plugins = []
+# disallow_untyped_defs = true
+
+# Ende der Vorlage
