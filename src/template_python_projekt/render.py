@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from string import Template
 from typing import Any
 
 
@@ -36,7 +35,20 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
             # fall back to the simple fallback below
             pass
 
-    # Fallback: convert Jinja-style `{{ var }}` to string.Template `${var}`
-    converted = re.sub(r"\{\{\s*([A-Za-z0-9_]+)\s*\}\}", r"${\1}", text)
-    t = Template(converted)
-    return t.safe_substitute(**{k: str(v) for k, v in context.items()})
+    # Fallback: support simple Jinja2 expressions used in our templates,
+    # especially `{{ var }}` and `{{ var | default('value') }}` patterns.
+    def _replace(match: re.Match[str]) -> str:
+        name = match.group("name")
+        default = match.group("default")
+        if name in context and context[name] is not None:
+            return str(context[name])
+        if default is not None:
+            return default
+        return ""
+
+    pattern: re.Pattern[str] = re.compile(
+        r"\{\{\s*(?P<name>[A-Za-z0-9_]+)\s*(?:\|\s*default\((['\"])(?P<default>.*?)\2\)\s*)?\}\}",
+    )
+    result = pattern.sub(_replace, text)
+    # Any remaining simple {{ var }} without default will be replaced by empty string
+    return re.sub(r"\{\{\s*[A-Za-z0-9_]+\s*\}\}", "", result)
