@@ -6,7 +6,7 @@ authors = [{ name = "Eichi76", email = "eichi76@gmx.net" }]
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = ["jinja2 (>=3.1.6,<4.0.0)"]
 
 [project.urls]
 repository = "https://github.com/Eichi76/Template-Python-Projekt"
