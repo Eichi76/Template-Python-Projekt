@@ -1,0 +1,10 @@
+# Poetry Konfiguration
+# Diese Datei bietet eine minimal gehaltene `poetry.toml`-Vorlage.
+
+[virtualenvs]
+# Wenn true, werden virtuelle Umgebungen im Projektordner erstellt.
+in-project = {{ virtualenvs_in_project | default("true") }}
+
+[experimental]
+# Beispiel einer experimentellen Einstellung
+new-installer = {{ new_installer | default("false") }}

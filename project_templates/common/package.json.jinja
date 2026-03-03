@@ -1,0 +1,11 @@
+{
+  "name": "{{ project_name | default("example-project") }}",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "lint:md": "markdownlint -c .markdownlint.json \"**/*.md\""
+  },
+  "devDependencies": {
+    "markdownlint-cli": "{{ markdownlint_version | default('^0.33.0') }}"
+  }
+}

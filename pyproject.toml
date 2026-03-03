@@ -2,14 +2,11 @@
 name = "template-python-projekt"
 version = "0.1.0"
 description = "Template Projekt für neue Python CLI / UI Projekte um den Start zuer erleichtern"
-authors = [
-    {name = "Eichi76",email = "eichi76@gmx.net"}
-]
+authors = [{ name = "Eichi76", email = "eichi76@gmx.net" }]
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12,<3.13"
-dependencies = [
-]
+dependencies = ["jinja2 (>=3.1.6,<4.0.0)"]
 
 [project.urls]
 repository = "https://github.com/Eichi76/Template-Python-Projekt"
@@ -17,7 +14,7 @@ repository = "https://github.com/Eichi76/Template-Python-Projekt"
 
 
 [tool.poetry]
-packages = [{include = "template_python_projekt", from = "src"}]
+packages = [{ include = "template_python_projekt", from = "src" }]
 
 [dependency-groups]
 test = [
@@ -26,14 +23,8 @@ test = [
     "pytest-cov (>=7.0.0,<8.0.0)",
     "codecov-cli (>=11.2.6,<12.0.0)",
 ]
-lint = [
-    "ruff (>=0.15.4,<0.16.0)",
-    "isort (>=8.0.1,<9.0.0)",
-]
-typechecker = [
-    "mypy (>=1.19.1,<2.0.0)",
-    "mypy-extensions (>=1.1.0,<2.0.0)"
-]
+lint = ["ruff (>=0.15.4,<0.16.0)", "isort (>=8.0.1,<9.0.0)"]
+typechecker = ["mypy (>=1.19.1,<2.0.0)", "mypy-extensions (>=1.1.0,<2.0.0)"]
 dev = [
     { include-group = "test" },
     { include-group = "lint" },
@@ -64,16 +55,8 @@ extend-exclude = ["docs", "test", "tests"]
 
 [tool.ruff.lint]
 select = ["F", "E"]
-extend-select = [
-    "ALL"
-]
-ignore = [
-    "D",
-    "CPY",
-    "T20",
-    "DOC",
-    "PGH",
-]
+extend-select = ["ALL"]
+ignore = ["D", "CPY", "T20", "DOC", "PGH"]
 fixable = ["ALL"]
 unfixable = []
 preview = true
@@ -142,7 +125,7 @@ disallow_subclassing_any = true
 # Miscellaneous strictness flags
 strict_equality = true
 # Configuring error messages
-exclude = ["docs", "test", "tests"]
+exclude = ["docs", "test", "tests", "project_templates/.*"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

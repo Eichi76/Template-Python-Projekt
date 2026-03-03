@@ -1,0 +1,43 @@
+# Platzhalter‑Spezifikation
+
+Dieses Dokument beschreibt die erwarteten Platzhalter, Filter und Konventionen
+für die Template‑Vorlagen in `project_templates/*`.
+
+Kurzfassung:
+
+- Template‑Engine: Jinja2 wird empfohlen und vollständig unterstützt.
+- Renderer‑Fallback: Falls `jinja2` nicht installiert ist, löst der Fallback
+  einfache Platzhalter wie `{{ name }}` und `{{ name | default('...') }}` auf.
+
+Erlaubte / empfohlene Platzhalter
+
+- `{{ project_name }}` — Projekt‑Kurzname (kleine Buchstaben, Unterstriche ok)
+- `{{ project_description }}` — Einzeilige Projektbeschreibung
+- `{{ author }}` — Autorname
+- `{{ license }}` — Lizenzbezeichnung (z. B. MIT)
+
+Filter und Defaults
+
+- Verwende den Jinja2 `default()`-Filter, wenn ein Fallback‑Wert erwünscht ist:
+
+```
+{{ project_description | default('Kurze Beschreibung hier') }}
+```
+
+- Der inoffizielle Fallback des Rendering‑Helpers unterstützt genau dieses
+  Pattern — komplexe Jinja2 Filterausdrücke sollten jedoch Jinja2 voraussetzen.
+
+Beste Praktiken
+
+- Halte Platzhalternamen einfach und konsistent (klein, ohne Leerzeichen).
+- Vermeide komplexe Logik in Templates; stelle stattdessen Daten über den
+  Rendering‑Kontext zur Verfügung.
+
+Beispiel
+
+```
+# project_templates/common/README.md.jinja
+# {{ project_name }}
+
+{{ project_description | default('Kurze Projekt‑Beschreibung hier einfügen.') }}
+```
