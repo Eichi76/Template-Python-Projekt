@@ -1,0 +1,30 @@
+# {{ project_name }}
+
+{{ project_description | default("Kurzes Projekt‑Beschreibung hier einfügen.") }}
+
+## Installation
+
+Folge diesen Schritten, um das Projekt lokal zu installieren:
+
+```sh
+python -m pip install -e .
+```
+
+## Nutzung
+
+Ein einfaches Beispiel zur Nutzung:
+
+```py
+from {{ project_name }} import main
+
+if __name__ == "__main__":
+    main()
+```
+
+## Mitwirken
+
+Beiträge sind willkommen. Bitte die Konventionen in CONTRIBUTING.md befolgen.
+
+## Lizenz
+
+{{ license | default("MIT") }}
