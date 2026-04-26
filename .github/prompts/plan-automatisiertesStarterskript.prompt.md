@@ -29,7 +29,7 @@ TL;DR - Was, warum, wie
 - 2.7 PR öffnen (nicht Draft) mit `gh` und deutschen Titel + ausführlicher Beschreibung (Vorlage unten):
   - `gh pr create --base issue/4 --head issue/4-<num>-<short> --title "Feature: <Kurzbeschreibung in DE>" --body "<ausführliche PR-Beschreibung>"`
 - 2.8 Warten auf CI/Linter/Tests. Wenn Fehler auftreten: lokal reproduzieren, fixen, commit/push erneut.
-- 2.9 Merge: Nur wenn alle Checks grün sind, PR nicht als Draft, und alle Akzeptanzkriterien erfüllt sind. Als Single‑Person‑Team ohne Reviewer mergen (via GitHub UI oder `gh pr merge --merge`).
+- 2.9 Merge: Nur wenn alle Checks grün sind, PR nicht als Draft, und alle Akzeptanzkriterien erfüllt sind. PRs von Sub‑Issue‑Branches werden immer per Squash‑Merge zusammengeführt (z. B. über die GitHub‑UI oder `gh pr merge --squash`).
 
 3. Parent-Branch Integration
 - Nach Abschluss aller Sub‑Issues: lokaler Rebase/Merge auf `issue/4` (z. B. `git checkout issue/4` + `git merge --no-ff issue/4-19-cli-design` usw. oder PRs direkt gegen `issue/4`).
