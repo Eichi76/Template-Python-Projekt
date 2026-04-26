@@ -1,13 +1,15 @@
-"""Rendering helpers for templates used in the project.
+"""Hilfsfunktionen zum Rendern von Templates im Projekt.
 
-This module prefers `jinja2` when available; otherwise it falls back to a
-small, well-scoped regexp-based subset to support common `{{ var }}` and
-`{{ var | default('value') }}` patterns used in the templates.
+Dieses Modul bevorzugt `jinja2`, wenn es verfügbar ist; andernfalls fällt
+es auf ein kleines, gezielt eingeschränktes regexp-basiertes Subset zurück,
+das die in unseren Templates verwendeten Muster `{{ var }}` und
+`{{ var | default('value') }}` unterstützt.
 """
 
 from __future__ import annotations
 
 import re
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -16,7 +18,7 @@ try:
     import jinja2
 
     _jinja2: Any | None = jinja2
-except ImportError:  # pragma: no cover - import fallback
+except ImportError:
     _jinja2 = None
 
 
@@ -33,11 +35,11 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
             template = env.get_template(path.name)
             return str(template.render(**context))
         except _jinja2.exceptions.TemplateError:
-            # fall back to the simple fallback below
+            # Bei Template-Fehlern auf die einfache Fallback-Implementation unten zurückgreifen
             pass
 
-    # Fallback: support simple Jinja2 expressions used in our templates,
-    # especially `{{ var }}` and `{{ var | default('value') }}` patterns.
+    # Fallback: einfache Jinja2-Ausdrücke aus unseren Templates unterstützen,
+    # insbesondere die Muster `{{ var }}` und `{{ var | default('value')}`.
     def _replace(match: re.Match[str]) -> str:
         name = match.group("name")
         default = match.group("default")
@@ -51,21 +53,21 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
         r"\{\{\s*(?P<name>[A-Za-z0-9_]+)\s*(?:\|\s*default\((['\"]) (?P<default>.*?)\2\)\s*)?\}\}",
     )
     result = pattern.sub(_replace, text)
-    # Any remaining simple {{ var }} without default will be replaced by empty string
+    # Verbleibende einfache {{ var }} ohne Default durch leeren String ersetzen
     return re.sub(r"\{\{\s*[A-Za-z0-9_]+\s*\}\}", "", result)
 
 
 def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str]:
-    """Render all files in *path* and return a mapping of relative paths -> content.
+    """Render alle Dateien in *path* und gib ein Mapping von relativen Pfaden -> Inhalt zurück.
 
-    The function walks *path* recursively, renders each file using
-    :func:`render_template_file` and returns a dictionary where keys are
-    POSIX-style relative paths (as strings) and values are the rendered file
-    contents.
+    Die Funktion durchläuft *path* rekursiv, rendert jede Datei mit
+    :func:`render_template_file` und liefert ein Dictionary, dessen Schlüssel
+    POSIX-artige relative Pfade (als Strings) sind und deren Werte die
+    gerenderten Dateiinhalte sind.
     """
     root = Path(path)
     if not root.exists():
-        msg = f"Path does not exist: {root}"
+        msg = f"Pfad existiert nicht: {root}"
         raise FileNotFoundError(msg)
 
     rendered: dict[str, str] = {}
@@ -78,3 +80,38 @@ def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str
 
 
 __all__ = ["render_directory", "render_template_file"]
+
+
+def _merge_dicts(existing: dict[str, Any], template: dict[str, Any]) -> dict[str, Any]:
+    """Verschmilzt rekursiv zwei Dictionaries, wobei Werte aus *existing* bevorzugt werden.
+
+    Bei Mapping-Werten wird die Verschmelzung rekursiv angewandt. Bei anderen
+    Typen wird der Wert aus *existing* beibehalten, falls vorhanden; sonst
+    wird der Wert aus *template* verwendet.
+    """
+    out: dict[str, Any] = dict(template)
+    # Zuerst die Template-Werte übernehmen, danach mit vorhandenen Werten
+    # aus `existing` überschreiben bzw. beibehalten
+
+    for key, eval_ in existing.items():
+        if key in out and isinstance(out[key], dict) and isinstance(eval_, dict):
+            out[key] = _merge_dicts(eval_, out[key])
+        else:
+            out[key] = eval_
+
+    return out
+
+
+def merge_toml_strings(existing_toml: str, template_toml: str) -> dict[str, Any]:
+    """Parst zwei TOML-Strings und liefert ein gemergtes Mapping zurück.
+
+    Die Funktion gibt eine Python-Struktur zurück, die die zusammengeführte
+    TOML-Struktur repräsentiert. Sie versucht bewusst nicht, TOML wieder zu
+    serialisieren - Aufrufer können ihre bevorzugte TOML-Bibliothek zum
+    Schreiben verwenden.
+    """
+
+    existing = tomllib.loads(existing_toml) if existing_toml.strip() else {}
+    template = tomllib.loads(template_toml) if template_toml.strip() else {}
+
+    return _merge_dicts(existing, template)
