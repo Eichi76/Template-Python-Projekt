@@ -1,7 +1,8 @@
-"""Ein kleines Rendering-Hilfsmodul für Template-Dokumentation.
+"""Rendering helpers for templates used in the project.
 
-Versucht, `jinja2` zu importieren; falls nicht vorhanden, wird ein einfacher
-`string.Template`-Fallback verwendet.
+This module prefers `jinja2` when available; otherwise it falls back to a
+small, well-scoped regexp-based subset to support common `{{ var }}` and
+`{{ var | default('value') }}` patterns used in the templates.
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ try:
     import jinja2
 
     _jinja2: Any | None = jinja2
-except ImportError:
+except ImportError:  # pragma: no cover - import fallback
     _jinja2 = None
 
 
@@ -47,7 +48,7 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
         return ""
 
     pattern: re.Pattern[str] = re.compile(
-        r"\{\{\s*(?P<name>[A-Za-z0-9_]+)\s*(?:\|\s*default\((['\"])(?P<default>.*?)\2\)\s*)?\}\}",
+        r"\{\{\s*(?P<name>[A-Za-z0-9_]+)\s*(?:\|\s*default\((['\"]) (?P<default>.*?)\2\)\s*)?\}\}",
     )
     result = pattern.sub(_replace, text)
     # Any remaining simple {{ var }} without default will be replaced by empty string
@@ -61,8 +62,6 @@ def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str
     :func:`render_template_file` and returns a dictionary where keys are
     POSIX-style relative paths (as strings) and values are the rendered file
     contents.
-
-    This helper is useful for testing templates without writing output files.
     """
     root = Path(path)
     if not root.exists():
@@ -76,3 +75,6 @@ def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str
         rel = p.relative_to(root).as_posix()
         rendered[rel] = render_template_file(p, context)
     return rendered
+
+
+__all__ = ["render_directory", "render_template_file"]
