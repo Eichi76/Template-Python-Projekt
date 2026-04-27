@@ -91,10 +91,9 @@ TL;DR - Was, warum, wie
 
 **Verifizierungs‑Schritte (pro Sub‑Issue)**
 1. Lint & Typecheck: `poetry run ruff check .` und `poetry run mypy .` — beide müssen lokal grün sein.
-2. Tests: `pytest -q` — alle relevanten Tests grün (bei Änderung gezielt ausführen).
+2. Tests: `poetry runpytest -q` — alle relevanten Tests grün (bei Änderung gezielt ausführen).
 3. Pre-commit: `pre-commit run --all-files` (oder Commiten und beobachten).
-4. CI: Prüfe GitHub Actions nach Push/PR; fixe CI‑Fehler lokal.
-5. Merge: PR erst mergen, wenn alle Checks bestanden.
+4. Merge: PR erst mergen, wenn alle Checks bestanden.
 
 **PR‑Titel und -Beschreibung (Vorlagen)**
 - PR‑Titel (DE): `Feature: <Kurzbeschreibung>` oder `Fix: <Kurzbeschreibung>` bei Bugfixes.
@@ -113,7 +112,7 @@ TL;DR - Was, warum, wie
   ```bash
   poetry run ruff check .
   poetry run mypy .
-  pytest -q tests/test_xxx.py
+  poetry run pytest -q tests/test_xxx.py
   ```
 
   ## Verwandte Issues
@@ -124,10 +123,10 @@ TL;DR - Was, warum, wie
 - PR erstellen gegen Parent-Branch `issue/4`:
   gh pr create --base issue/4 --head issue/4-19-cli-design --title "Feature: CLI-Schnittstelle für Starterskript" --body "## Zusammenfassung\nImplementiert CLI...\n"
 
-- Merge nach Erfolg: `gh pr merge <PR_NUM_OR_URL> --merge --body "Merge von Sub-Issue <num>"`
+- Merge nach Erfolg: `gh pr merge <PR_NUM_OR_URL> --squash --body "Merge von Sub-Issue <num>"`
 
 **CI / Konfigurations‑Risiken**
-- `pyproject.toml` enthält ruff/mypy settings; CI prüft diese. Falls CI-Checks strenger sind, lokale Umgebung anpassen.
+- `pyproject.toml` enthält ruff/mypy settings.
 - Pre-commit Hooks können lokale Abbrüche verursachen — immer lokal ausführen, Fehler beheben.
 
 **Entscheidungen & Annahmen**
