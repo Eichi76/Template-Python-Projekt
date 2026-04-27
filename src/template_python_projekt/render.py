@@ -88,6 +88,61 @@ def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str
     return rendered
 
 
+def render_project(
+    template_name: str,
+    project_name: str,
+    dest: str | Path = ".",
+    *,
+    dry_run: bool = False,
+    force: bool = False,
+) -> dict[str, str]:
+    """Render ein Template-Projekt in *project_templates/<template_name>/src*.
+
+    - Bei *dry_run=True* werden keine Dateien geschrieben; stattdessen wird ein
+      Mapping von Zielpfad -> Inhalt zurückgegeben und geplante Aktionen ausgegeben.
+    - Falls eine Zieldatei bereits existiert und *force=False*, wird ein
+      ``FileExistsError`` mit den konfligierenden Pfaden geworfen.
+
+    Die Funktion entfernt automatisch die Suffix `.jinja` von Ziel-Dateinamen.
+    """
+    root = Path(__file__).resolve().parents[2]
+    template_dir = root / "project_templates" / template_name / "src"
+    if not template_dir.exists():
+        msg = f"Template not found: {template_dir}"
+        raise FileNotFoundError(msg)
+
+    rendered = render_directory(template_dir, {"name": project_name})
+
+    planned: dict[str, str] = {}
+    conflicts: list[str] = []
+    dest_root = Path(dest) / project_name
+
+    for rel, content in rendered.items():
+        target = dest_root / rel
+        # Entferne .jinja Suffix falls vorhanden
+        if target.suffix == ".jinja":
+            target = target.with_suffix("")
+        planned[str(target)] = content
+        if target.exists() and not force:
+            conflicts.append(str(target))
+
+    if conflicts:
+        raise FileExistsError("Conflicting files exist: " + ", ".join(conflicts))
+
+    if dry_run:
+        for t in planned:
+            print("Would write:", t)
+        return planned
+
+    # Schreibe die Dateien tatsächlich
+    for t, content in planned.items():
+        p = Path(t)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(content, encoding="utf-8")
+
+    return planned
+
+
 __all__ = ["render_directory", "render_template_file"]
 
 
