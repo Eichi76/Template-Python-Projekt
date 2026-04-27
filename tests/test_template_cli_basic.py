@@ -2,7 +2,7 @@ import subprocess
 import sys
 
 
-def _run(args: list[str]) -> subprocess.CompletedProcess:
+def _run(args: list[str]) -> subprocess.CompletedProcess[str]:
     return subprocess.run([sys.executable, "-m", "template_python_projekt"] + args, capture_output=True, text=True)
 
 
