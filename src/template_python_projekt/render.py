@@ -8,7 +8,11 @@ das die in unseren Templates verwendeten Muster `{{ var }}` und
 
 from __future__ import annotations
 
+import contextlib
+import os
 import re
+import shutil
+import tempfile
 import tomllib
 from pathlib import Path
 from typing import Any
@@ -88,6 +92,62 @@ def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str
     return rendered
 
 
+def _prepare_plan(
+    rendered: dict[str, str],
+    dest_root: Path,
+    *,
+    force: bool,
+) -> tuple[dict[str, str], list[str]]:
+    """Erzeuge das `planned`-Mapping und Liste von Konflikten.
+
+    Ausgelagert, damit die Hauptfunktion übersichtlicher bleibt und Linter
+    Statement-Grenzen einhält.
+    """
+    planned: dict[str, str] = {}
+    conflicts: list[str] = []
+    for rel, content in rendered.items():
+        target = dest_root / rel
+        # Entferne .jinja Suffix falls vorhanden
+        if target.suffix == ".jinja":
+            target = target.with_suffix("")
+        planned[str(target)] = content
+        if target.exists() and not force:
+            conflicts.append(str(target))
+    return planned, conflicts
+
+
+def _backup_existing(p: Path, backup_dir: str) -> None:
+    if p.exists():
+        bpath = Path(backup_dir) / (p.name + ".bak")
+        shutil.copy2(p, bpath)
+
+
+def _atomic_write(p: Path, content: str) -> None:
+    fd, tmp_path = tempfile.mkstemp(prefix=".tmp_", dir=str(p.parent))
+    os.close(fd)
+    try:
+        Path(tmp_path).write_text(content, encoding="utf-8")
+        Path(tmp_path).replace(str(p))
+    finally:
+        with contextlib.suppress(OSError):
+            if Path(tmp_path).exists():
+                Path(tmp_path).unlink()
+
+
+def _restore_backups_and_cleanup(
+    backup_dir: str,
+    dest_root: Path,
+    created_files: list[str],
+) -> None:
+    for b in Path(backup_dir).iterdir():
+        orig = Path(dest_root) / b.stem
+        with contextlib.suppress(Exception):
+            shutil.copy2(b, orig)
+    for nf in created_files:
+        with contextlib.suppress(OSError):
+            Path(nf).unlink()
+
+
 def render_project(
     template_name: str,
     project_name: str,
@@ -113,18 +173,8 @@ def render_project(
 
     rendered = render_directory(template_dir, {"name": project_name})
 
-    planned: dict[str, str] = {}
-    conflicts: list[str] = []
     dest_root = Path(dest) / project_name
-
-    for rel, content in rendered.items():
-        target = dest_root / rel
-        # Entferne .jinja Suffix falls vorhanden
-        if target.suffix == ".jinja":
-            target = target.with_suffix("")
-        planned[str(target)] = content
-        if target.exists() and not force:
-            conflicts.append(str(target))
+    planned, conflicts = _prepare_plan(rendered, dest_root, force=force)
 
     if conflicts:
         raise FileExistsError("Conflicting files exist: " + ", ".join(conflicts))
@@ -134,16 +184,33 @@ def render_project(
             print("Would write:", t)
         return planned
 
-    # Schreibe die Dateien tatsächlich
-    for t, content in planned.items():
-        p = Path(t)
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(content, encoding="utf-8")
+    # Schreibe die Dateien tatsächlich mit Backup und atomaren Writes.
+    backup_dir = tempfile.mkdtemp(prefix="tpl_backup_")
+
+    created_files: list[str] = []
+
+    try:
+        for t, content in planned.items():
+            p = Path(t)
+            p.parent.mkdir(parents=True, exist_ok=True)
+
+            if p.exists():
+                _backup_existing(p, backup_dir)
+            else:
+                created_files.append(str(p))
+
+            _atomic_write(p, content)
+    except Exception:
+        _restore_backups_and_cleanup(backup_dir, dest_root, created_files)
+        raise
+    finally:
+        with contextlib.suppress(Exception):
+            shutil.rmtree(backup_dir)
 
     return planned
 
 
-__all__ = ["render_directory", "render_template_file"]
+__all__ = ["render_directory", "render_project", "render_template_file"]
 
 
 def _merge_dicts(existing: dict[str, Any], template: dict[str, Any]) -> dict[str, Any]:
