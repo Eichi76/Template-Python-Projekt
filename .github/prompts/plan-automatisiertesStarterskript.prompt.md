@@ -20,7 +20,7 @@ TL;DR - Was, warum, wie
 - 2.3 Lokale Checks wiederholt ausführen während Entwicklung:
   - `poetry run ruff check .`
   - `poetry run mypy .`
-  - `pytest -q --maxfail=1` (oder gezielt: `pytest tests/test_xxx.py`).
+  - `poetry run pytest -q --maxfail=1` (oder gezielt: `pytest tests/test_xxx.py`).
 - 2.4 Committieren (prägnante Commit‑Message, Referenz auf Issue):
   - `git add -A`
   - `git commit -m "Fixes #<num>: Kurze Beschreibung"`
