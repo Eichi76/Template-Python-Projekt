@@ -1,16 +1,17 @@
 from pathlib import Path
+from typing import Any
 
 from template_python_projekt.render import render_template_file
 
 
-def test_readme_and_changelog_templates_render():
+def test_readme_and_changelog_templates_render() -> None:
     readme = Path("project_templates/common/README.md.jinja")
     changelog = Path("project_templates/common/CHANGELOG.md.jinja")
 
     assert readme.exists(), "README template missing"
     assert changelog.exists(), "CHANGELOG template missing"
 
-    ctx = {"project_name": "example_project", "project_description": "Beschreibung"}
+    ctx: dict[str, Any] = {"project_name": "example_project", "project_description": "Beschreibung"}
     rendered_readme = render_template_file(readme, ctx)
     rendered_changelog = render_template_file(changelog, ctx)
 

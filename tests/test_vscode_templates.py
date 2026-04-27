@@ -1,9 +1,10 @@
 from pathlib import Path
+from typing import Any
 
 from template_python_projekt.render import render_template_file
 
 
-def test_vscode_settings_launch_tasks_render():
+def test_vscode_settings_launch_tasks_render() -> None:
     base = Path("project_templates/common/.vscode")
     settings = base / "settings.json.jinja"
     launch = base / "launch.json.jinja"
@@ -13,7 +14,7 @@ def test_vscode_settings_launch_tasks_render():
     assert launch.exists()
     assert tasks.exists()
 
-    ctx = {"module_name": "example_project"}
+    ctx: dict[str, Any] = {"module_name": "example_project"}
 
     for p in (settings, launch, tasks):
         rendered = render_template_file(p, ctx)

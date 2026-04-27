@@ -18,3 +18,5 @@ Wichtige Verzeichnisse
   Verzeichnisstruktur aussehen soll.
 - `README.md` — Diese Datei: Zweck des Repositorys und grundlegende
   Verwendung.
+
+Weitere Details und Beispiele findest du in der ausführlichen Dokumentation: [docs/README.md](docs/README.md)
