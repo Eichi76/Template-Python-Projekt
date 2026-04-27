@@ -34,7 +34,7 @@ def ensure_poetry_environment(*, run_install: bool = False) -> tuple[bool, str]:
 
     # Ausführliche Installation bewusst nicht automatisch ausführen, um keine
     # Prozesse im Kontext des Generators zu starten. Stattdessen geben wir
-    # eine handlungsorientierte Nachricht zurück, die der Benutzer per Hand ausführen kann.
+    # eine handlungsorientierte Nachricht zurück, dissere der Benutzer per Hand ausführen kann.
     return (
         True,
         (
