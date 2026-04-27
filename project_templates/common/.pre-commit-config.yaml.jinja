@@ -1,3 +1,25 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/pycqa/ruff
+    rev: {{ ruff_rev | default("stable") }}
+    hooks:
+      - id: ruff
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: {{ mypy_rev | default("stable") }}
+    hooks:
+      - id: mypy
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
 # .pre-commit-config.yaml Template (Platzhalter erlaubt)
 # Diese Vorlage legt empfohlene Hooks für das Projekt fest.
 # Versionen/Revisionsangaben können über Platzhalter gesetzt werden.

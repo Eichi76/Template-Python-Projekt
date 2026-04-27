@@ -33,10 +33,16 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
                 autoescape=_jinja2.select_autoescape(),
             )
             template = env.get_template(path.name)
-            return str(template.render(**context))
+            out_text = str(template.render(**context))
         except _jinja2.exceptions.TemplateError:
             # Bei Template-Fehlern auf die einfache Fallback-Implementation unten zurückgreifen
             pass
+        else:
+            # Wenn die Quelldatei mit einem Newline endet, erhalten wir diesen
+            # in der gerenderten Ausgabe ebenfalls (Tests erwarten das).
+            if text.endswith("\n") and not out_text.endswith("\n"):
+                out_text += "\n"
+            return out_text
 
     # Fallback: einfache Jinja2-Ausdrücke aus unseren Templates unterstützen,
     # insbesondere die Muster `{{ var }}` und `{{ var | default('value')}`.
@@ -54,7 +60,10 @@ def render_template_file(path: str | Path, context: dict[str, Any]) -> str:
     )
     result = pattern.sub(_replace, text)
     # Verbleibende einfache {{ var }} ohne Default durch leeren String ersetzen
-    return re.sub(r"\{\{\s*[A-Za-z0-9_]+\s*\}\}", "", result)
+    final = re.sub(r"\{\{\s*[A-Za-z0-9_]+\s*\}\}", "", result)
+    if text.endswith("\n") and not final.endswith("\n"):
+        final += "\n"
+    return final
 
 
 def render_directory(path: str | Path, context: dict[str, Any]) -> dict[str, str]:
