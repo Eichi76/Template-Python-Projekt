@@ -21,7 +21,7 @@ Checks (bereits lokal ausgeführt)
 Merge‑Vorgaben
 ---------------
 - Ziel: `main` (finaler Merge)
-- Merge‑Methode: `squash and merge`
+- Merge‑Methode: Standard Merge (Merge‑Commit) — kein Squash
 - Branches: `issue/4` kann nach Merge gelöscht werden
 
 Bitte Review und dann Merge durchführen.
