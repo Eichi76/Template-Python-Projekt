@@ -16,6 +16,28 @@ Alle signifikanten Änderungen am Projekt werden hier dokumentiert.
 
 -
 
+## [0.3.0] - 2026-04-27
+
+### Added (0.3.0)
+
+- Atomare Dateioperationen, Backups und Rollback‑Mechanismus im Template
+  Renderer (`src/template_python_projekt/render.py`).
+- GitHub Actions CI Workflow (`.github/workflows/ci.yml`) für `ruff`, `mypy` und
+  `pytest` (Python 3.12).
+- Ausführliche Nutzer‑/Entwicklerdokumentation unter `docs/README.md`.
+- Neue CLI/Env‑Hilfsmodule: `node_env.py`, `poetry_env.py` und
+  `src/template_python_projekt/main.py` / `__main__.py`.
+- Diverse Tests und Verbesserungen der Template‑Vorlagen (`project_templates/*`).
+
+### Changed (0.3.0)
+
+- Verschieben und Vereinheitlichen von Template‑Vorlagen unter
+  `project_templates/common`.
+
+### Notes (0.3.0)
+
+- Vor dem nächsten Release: Unreleased‑Abschnitt für neue Änderungen nutzen.
+
 ## [0.2.0] - 2026-03-03
 
 ### Added
