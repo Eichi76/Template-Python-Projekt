@@ -17,6 +17,20 @@ Alle signifikanten Änderungen am Projekt werden hier dokumentiert.
   neue `README.md.jinja` Templates mit Anleitungen zum Ausführen,
   Debuggen, Testen und Packaging sowie Beispielausgaben (Issue #34, PR #70).
 
+- Quickstart, manuelle Initialisierung und Troubleshooting ergänzt
+  (Issue #5, PR #73):
+  - `docs/quickstart.md` erklärt das Erzeugen eines
+    "ready to use" Projekts aus Templates.
+  - `docs/manual_initialization.md` dokumentiert die manuellen
+    Reproduktionsschritte des Starterskripts.
+  - `docs/troubleshooting.md` erweitert häufige Probleme und
+    Verifikationsbefehle.
+  - Starter‑CLI und Renderer:
+    `src/template_python_projekt/main.py`,
+    `src/template_python_projekt/render.py`.
+  - Zugehörige Tests wurden hinzugefügt/aktualisiert; lokale
+    Test‑Suite: 25 passed.
+
 ### Changed (Unreleased)
 
 -
