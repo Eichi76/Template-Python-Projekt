@@ -1,0 +1,18 @@
+# Beispiel: README Merge‑Muster
+
+Wenn das Template eine neue `README.md` liefert, sollten projekt-spezifische
+Abschnitte erhalten bleiben. Vorgehen:
+
+1. Render die Template-README in ein temporäres Verzeichnis.
+2. Vergleiche die gerenderte Datei mit der existierenden `README.md`.
+3. Übernehme generische Template-Änderungen (z. B. Badges, CI‑Hinweise), aber
+   behalte Usage- und Beispielabschnitte des Zielprojekts.
+4. Dokumentiere alle übernommenen Änderungen im Commit-Text.
+
+Beispiel: Verwende `git` und `diff` zum Überprüfen:
+
+```bash
+git checkout -b migration/readme-update
+# render in /tmp/new_readme
+diff -u README.md /tmp/new_readme/README.md | less
+```

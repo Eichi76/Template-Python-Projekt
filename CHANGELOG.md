@@ -8,6 +8,15 @@ Alle signifikanten Änderungen am Projekt werden hier dokumentiert.
 
 - Platz für laufende Änderungen bis zum nächsten Release.
 
+- Detaillierte Anleitung: Nutzung des Starterskripts
+  (`--template`, `--name`, `--dest`, `--dry-run`, `--force`) mit
+  Beispielen und erwarteter Ausgabe; ergänzender Dry‑Run‑Test
+  `tests/test_template_cli_basic.py::test_example_dry_run` (Issue #30, PR #64).
+
+- Dokumentation für Beispielprojekte: `cli-basic` und `ui-pyside6` —
+  neue `README.md.jinja` Templates mit Anleitungen zum Ausführen,
+  Debuggen, Testen und Packaging sowie Beispielausgaben (Issue #34, PR #70).
+
 ### Changed (Unreleased)
 
 -
