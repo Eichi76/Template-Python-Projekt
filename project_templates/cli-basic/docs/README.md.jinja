@@ -1,0 +1,83 @@
+# {{ project_name }} — Beispiel: CLI Basic
+
+Diese Datei beschreibt, wie man das generierte CLI‑Beispielprojekt ausführt, debuggt, testet und paketiert. Die Schritte sind so formuliert, dass sie direkt aus dem gerenderten Template anwendbar sind.
+
+## Schnellstart — Ausführen
+
+1) Projekt generieren (Dry‑Run)
+
+```bash
+python -m template_python_projekt --template cli-basic --name demo --dry-run
+```
+
+2) Projekt wirklich erzeugen
+
+```bash
+python -m template_python_projekt --template cli-basic --name demo
+cd demo
+```
+
+3) CLI ausführen
+
+```bash
+python -m demo.main --help
+```
+
+Erwartete Ausgabe (Beispiel):
+
+```
+usage: main.py [-h] [--example EXAMPLE]
+
+Demo CLI
+optional arguments:
+  -h, --help       show this help message and exit
+  --example EXAMPLE  Beispielparameter
+```
+
+## Debuggen
+
+- Lokales Debugging: Öffne das Projekt in deinem Editor/IDE und setze Breakpoints in `demo/src/main.py`.
+- Mit `python -m debugpy --listen 5678 -m demo.main` kann VS Code/IDE an Port 5678 verbinden.
+
+## Tests
+
+0) Installiere Abhängigkeiten (falls notwendig)
+
+```bash
+python -m pip install -e .
+# oder mit Poetry im generierten Projekt:
+poetry install --with dev
+```
+
+1) Tests ausführen
+
+```bash
+poetry run pytest -q
+```
+
+Erwartete Ausgabe (Beispiel):
+
+```
+============================= test session starts ==============================
+collected 3 items
+
+tests/test_main.py ...                                                     [100%]
+
+============================== 3 passed in 0.12s ===============================
+```
+
+## Packaging
+
+- Mit `python -m build` erzeugst du sdist und wheel (stellen Sie sicher, dass `build` installiert ist).
+- Mit Poetry:
+
+```bash
+poetry build
+```
+
+## Hinweise
+
+- Falls dein Zielprojekt Poetry verwendet, nutze `poetry run` für Befehle in der Entwicklungsumgebung.
+- Passe die Beispiele an das tatsächliche Package/Modul‑Naming des gerenderten Templates an (z. B. `demo.main`).
+
+<!-- EOF -->

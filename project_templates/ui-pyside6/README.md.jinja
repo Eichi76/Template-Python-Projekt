@@ -1,0 +1,80 @@
+# {{ project_name }} — Beispiel: PySide6 UI
+
+Diese Datei beschreibt, wie man das generierte PySide6‑Beispielprojekt ausführt, debuggt, testet und paketiert.
+
+## Schnellstart — Ausführen
+
+1) Projekt generieren (Dry‑Run)
+
+```bash
+python -m template_python_projekt --template ui-pyside6 --name demo --dry-run
+```
+
+2) Projekt wirklich erzeugen
+
+```bash
+python -m template_python_projekt --template ui-pyside6 --name demo
+cd demo
+```
+
+3) UI starten
+
+```bash
+python -m demo.main
+```
+
+Erwartete Ausgabe / Verhalten (Beispiel):
+
+- Ein Fenster mit Titel "DemoApp" öffnet sich (oder eine kurze Konsolenausgabe, falls die Vorlage nur einen Headless‑Stub enthält).
+
+## Debuggen
+
+- Setze Breakpoints in `demo/src/main.py` oder `demo/src/view/`.
+- Remote‑Debugging mit `debugpy`:
+
+```bash
+python -m debugpy --listen 5678 -m demo.main
+```
+
+Dann in VS Code verbinden (Port 5678).
+
+## Tests
+
+0) Abhängigkeiten installieren
+
+```bash
+python -m pip install -e .
+# oder mit Poetry im generierten Projekt:
+poetry install --with dev
+```
+
+1) Tests ausführen
+
+```bash
+poetry run pytest -q
+```
+
+Erwartete Ausgabe (Beispiel):
+
+```
+============================= test session starts ==============================
+collected 2 items
+
+tests/test_ui_startup.py ..                                                  [100%]
+
+============================== 2 passed in 0.50s ===============================
+```
+
+Hinweis: UI‑Tests können Headless‑Modi oder Mocks erfordern; passe Tests entsprechend an.
+
+## Packaging
+
+- Mit `poetry build` erzeugst du wheel und sdist.
+- Für Desktop‑Distributionen nutze Tools wie `briefcase` oder `pyinstaller` (nicht Teil dieses Templates; Hinweise und Beispiele können hier ergänzt werden).
+
+## Hinweise
+
+- PySide6 sollte in der `pyproject.toml` oder `requirements.txt` des generierten Projekts als Abhängigkeit angegeben werden.
+- Wenn das Template nur einen Stub als `main` liefert, ergänze die `view/`‑Implementierung mit einem einfachen `QMainWindow`‑Beispiel für Demo‑Zwecke.
+
+<!-- EOF -->
