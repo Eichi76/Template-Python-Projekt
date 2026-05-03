@@ -79,3 +79,7 @@ Nächste Schritte
 
 - Ergänze diesen Quickstart mit Screenshots, Beispielausgaben und
   optionalen CI‑Skripten zum Smoke‑Test.
+
+- Siehe auch die detaillierte Anleitung zur manuellen Initialisierung:
+  [Manuelle Initialisierung](manual_initialization.md) — reproduziert das
+  Verhalten des Starterskripts Schritt für Schritt (Issue #31).
