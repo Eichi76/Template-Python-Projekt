@@ -8,41 +8,13 @@ Dies ist die Beispiel‑Dokumentationsseite für das Template `cli-basic`.
 pip install -e .
 ```
 
-## CLI‑Flags (Starter Script)
+## Benutzung
 
-Das Starter‑CLI (`python -m template_python_projekt`) unterstützt folgende Flags:
-
-- `--template` (required): Name des Templates, z. B. `cli-basic`.
-- `--name` (required): Name des zu erzeugenden Projekts.
-- `--dest` (optional): Zielverzeichnis. Default: `.`
-- `--dry-run` (flag): Keine Dateien schreiben; es werden die geplanten Aktionen ausgegeben.
-- `--force` (flag): Existierende Dateien überschreiben.
-
-Für jedes Flag gibt es in den Beispielaufrufen weiter unten ein konkretes Beispiel.
-
-## Beispiele
-
-1) Hilfe anzeigen
+Starten Sie das Beispiel:
 
 ```bash
-python -m template_python_projekt --help
+python -m project_templates.cli_basic.src.main --help
 ```
-
-2) Dry‑Run eines Template‑Renders (keine Dateien werden geschrieben)
-
-```bash
-python -m template_python_projekt --template cli-basic --name demo --dry-run
-```
-
-Erwartete Ausgabe (Beispiel):
-
-```
-starter: template=cli-basic, name=demo, dest=., dry_run=True, force=False
-Would write: demo/README.md
-Would write: demo/src/__init__.py
-```
-
-Hinweis: Die exakten `Would write:` Pfade hängen vom Template‑Inhalt ab.
 
 ## Template‑Variablen
 - `project_name`: Name des Projekts

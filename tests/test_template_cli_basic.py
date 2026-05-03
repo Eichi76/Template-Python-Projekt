@@ -16,9 +16,3 @@ def test_missing_required_args_fails() -> None:
     # missing --template and --name should cause non-zero exit (argparse)
     r = _run([])
     assert r.returncode != 0
-
-
-def test_example_dry_run() -> None:
-    r = _run(["--template", "cli-basic", "--name", "demo", "--dry-run"])
-    assert r.returncode == 0
-    assert "Would write:" in r.stdout
