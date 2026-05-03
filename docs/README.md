@@ -105,6 +105,9 @@ gehalten, dass lokale `poetry run` Befehle sie reproduzieren.
 - Ruff/Mypy Fehler: `poetry run ruff check .` und `poetry run mypy .` lokal
   ausführen und Fehler beheben.
 
+Weitere Details und eine ausführliche FAQ findest du in
+[Troubleshooting & FAQ](troubleshooting.md).
+
 ## Contributing
 
 - Branch‑Naming: `issue/4-<num>-<short>` (Sub‑Issue Branches gegen `issue/4`).
