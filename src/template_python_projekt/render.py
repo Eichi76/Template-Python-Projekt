@@ -14,6 +14,7 @@ import re
 import shutil
 import tempfile
 import tomllib
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -96,7 +97,7 @@ def _prepare_plan(
     rendered: dict[str, str],
     dest_root: Path,
     *,
-    force: bool,
+    update_mode: str,
 ) -> tuple[dict[str, str], list[str]]:
     """Erzeuge das `planned`-Mapping und Liste von Konflikten.
 
@@ -105,20 +106,32 @@ def _prepare_plan(
     """
     planned: dict[str, str] = {}
     conflicts: list[str] = []
+    if update_mode not in {"backup", "skip", "overwrite"}:
+        raise ValueError("unsupported update_mode: " + str(update_mode))
+
     for rel, content in rendered.items():
         target = dest_root / rel
         # Entferne .jinja Suffix falls vorhanden
         if target.suffix == ".jinja":
             target = target.with_suffix("")
+
+        # Wenn Datei schon existiert und wir 'skip' gewählt haben, dann
+        # planen wir keine Änderung für diese Datei.
+        if target.exists() and update_mode == "skip":
+            continue
+
         planned[str(target)] = content
-        if target.exists() and not force:
+        # Konflikte werden nicht als Fehler behandelt, Update-Strategie steuert Verhalten
+        if target.exists():
             conflicts.append(str(target))
+
     return planned, conflicts
 
 
 def _backup_existing(p: Path, backup_dir: str) -> None:
     if p.exists():
-        bpath = Path(backup_dir) / (p.name + ".bak")
+        ts = datetime.now().astimezone().strftime("%Y%m%d%H%M%S")
+        bpath = Path(backup_dir) / (p.name + f".bak.{ts}")
         shutil.copy2(p, bpath)
 
 
@@ -154,7 +167,7 @@ def render_project(
     dest: str | Path = ".",
     *,
     dry_run: bool = False,
-    force: bool = False,
+    update_mode: str = "backup",
 ) -> dict[str, str]:
     """Render ein Template-Projekt in *project_templates/<template_name>/src*.
 
@@ -174,17 +187,14 @@ def render_project(
     rendered = render_directory(template_dir, {"name": project_name})
 
     dest_root = Path(dest) / project_name
-    planned, conflicts = _prepare_plan(rendered, dest_root, force=force)
-
-    if conflicts:
-        raise FileExistsError("Conflicting files exist: " + ", ".join(conflicts))
+    planned, _conflicts = _prepare_plan(rendered, dest_root, update_mode=update_mode)
 
     if dry_run:
         for t in planned:
             print("Would write:", t)
         return planned
 
-    # Schreibe die Dateien tatsächlich mit Backup und atomaren Writes.
+    # Schreibe die Dateien tatsächlich mit Backup-Strategie und atomaren Writes.
     backup_dir = tempfile.mkdtemp(prefix="tpl_backup_")
 
     created_files: list[str] = []
@@ -194,8 +204,12 @@ def render_project(
             p = Path(t)
             p.parent.mkdir(parents=True, exist_ok=True)
 
+            # Falls Datei existiert und Update-Mode == 'skip', haben wir sie
+            # bereits aus `planned` gefiltert. Hier behandeln wir Backup vs Overwrite.
             if p.exists():
-                _backup_existing(p, backup_dir)
+                if update_mode == "backup":
+                    _backup_existing(p, backup_dir)
+                # overwrite -> einfach überschreiben (kein Backup)
             else:
                 created_files.append(str(p))
 

@@ -1,0 +1,27 @@
+# Beispiel: `pyproject.toml` Migration
+
+Dieses Beispiel zeigt ein sicheres Vorgehen, um `pyproject.toml`-Änderungen
+in ein bestehendes Projekt zu übernehmen.
+
+1. Render die neue `pyproject.toml` in ein temporäres Verzeichnis.
+
+   ```bash
+   python -m template_python_projekt --render /tmp/new_project
+   ```
+
+2. Vergleiche die Abschnitte `tool.poetry.dependencies` und
+   `tool.poetry.dev-dependencies` mit einem diff-Tool.
+
+3. Übernimm nur die notwendigen Versions- oder Konfigurationsänderungen
+   manuell oder per Patch; behalte projektspezifische Anpassungen.
+
+4. Führe `poetry install` lokal in einer virtuellen Umgebung durch und
+   prüfe, ob Tests erfolgreich laufen.
+
+5. Committe Änderungen in einem separaten Branch und verifiziere Lint/Typechecks:
+
+```bash
+poetry run ruff check .
+poetry run mypy .
+poetry run pytest -q
+```

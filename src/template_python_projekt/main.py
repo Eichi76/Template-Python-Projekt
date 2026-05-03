@@ -27,6 +27,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--dest", default=".", help="Destination directory")
     p.add_argument("--dry-run", action="store_true", help="Show actions without writing files")
     p.add_argument("--force", action="store_true", help="Overwrite existing files if necessary")
+    p.add_argument(
+        "--update-mode",
+        choices=["backup", "skip", "overwrite"],
+        default="backup",
+        help="Update strategy when target files exist (default: backup)",
+    )
     return p
 
 
@@ -43,12 +49,16 @@ def main(argv: list[str] | None = None) -> int:
 
     if render and hasattr(render, "render_project"):
         try:
+            # Map legacy --force to update_mode=overwrite
+            if args.force:
+                args.update_mode = "overwrite"
+
             render.render_project(
                 template_name=args.template,
                 project_name=args.name,
                 dest=args.dest,
                 dry_run=args.dry_run,
-                force=args.force,
+                update_mode=args.update_mode,
             )
         except Exception as exc:  # noqa: BLE001 - top-level CLI should report unexpected errors
             print(f"Error: {exc}", file=sys.stderr)
